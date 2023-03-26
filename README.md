@@ -14,19 +14,20 @@
 
 ## MySQL 데이터베이스 생성 및 사용자 생성
 
--- SQL
+'''SQL
 create user 'bloguser'@'%'identified by 'bitc5600';
 GRANT ALL PRIVILEGES ON *.* TO 'bloguser'@'%';
 create database blog;
 use blog;
---
+'''
 
 ## MySQL 테이블 생성
 
--- SQL
+
 - bloguser 사용자로 접속
 - use blog; 데이터 베이스 선택
 
+'''SQL
 CREATE TABLE user(
 	id int primary key auto_increment,
     uesrname varchar(100) not null,
@@ -58,5 +59,4 @@ CREATE TABLE reply(
     foreign key (boardId) references board(id) on delete
     cascade
 ) engine=InnoDB default charset=utf8;
-
---
+'''
