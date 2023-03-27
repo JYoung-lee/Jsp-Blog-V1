@@ -21,8 +21,7 @@ public class UserDao {
 			int result = pstmt.executeUpdate();
 			return result;
 		}catch(Exception e) {
-			e.printStackTrace();
-			
+			e.printStackTrace();		
 		}finally {//무조건 실행
 			DB.close(conn, pstmt);
 		}
