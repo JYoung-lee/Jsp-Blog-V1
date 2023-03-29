@@ -5,6 +5,9 @@
 
 <div class="container">
 	<form action="/blog/user?cmd=join" method="post">
+	  <div class="d-flex justify-content-end">
+	  	<button type="button" class="btn btn-info" onclick=""> 중복확인 </button>
+	  </div>
 	  <div class="form-group">
 	    <input type="text" name="username" class="form-control" placeholder="Enter Username" required/>
 	  </div>
