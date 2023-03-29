@@ -1,16 +1,16 @@
 # JSP 블로그 프로젝트
 
-## 환경 
+## 개발 환경 
 
-- windows10
+- Windows10
 - jdk1.8
-- tomcat 9.0
-- mysql8.0
-- postman
-- lombok
+- Tomcat 9.0
+- Mysql8.0
+- Postman
+- Lombok
 - gson (json파싱)
 - 인코딩 utf-8
-- git
+- Git
 
 ## MySQL 데이터베이스 생성 및 사용자 생성
 
@@ -29,7 +29,7 @@ use blog;
 
 ```SQL
 CREATE TABLE user(
-	id int primary key auto_increment,
+    id int primary key auto_increment,
     uesrname varchar(100) not null,
     password varchar(100) not null,
     email varchar(100) not null,
@@ -39,7 +39,7 @@ CREATE TABLE user(
 ) engine=InnoDB default charset=utf8;
 
 CREATE TABLE board (
-	id int primary key auto_increment,
+    id int primary key auto_increment,
     userId int,
     tilte varchar(100) not null,
     content longtext,
@@ -49,7 +49,7 @@ CREATE TABLE board (
 ) engine=InnoDB default charset=utf8;
 
 CREATE TABLE reply(
-	id int primary key auto_increment,
+    id int primary key auto_increment,
     userId int,
     boardId int,
     content varchar(300) not null,
