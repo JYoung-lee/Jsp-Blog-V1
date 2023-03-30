@@ -4,9 +4,9 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
-	<form action="/blog/user?cmd=join" method="post">
+	<form action="/blog/user?cmd=join" method="post" onsubmit="return valid()">
 	  <div class="d-flex justify-content-end">
-	  	<button type="button" class="btn btn-info" onclick=""> 중복확인 </button>
+	  	<button type="button" class="btn btn-info" onclick="idCheck()"> 중복체크 </button>
 	  </div>
 	  <div class="form-group">
 	    <input type="text" name="username" class="form-control" placeholder="Enter Username" required/>
@@ -29,17 +29,29 @@
 </div>
 
 <script>
+	let isChecking = true;
 
-// 주소검색 팝업open
-function goPopup(){
-	var pop = window.open("/blog/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
-}
-
-// result 값 넣어주기
-function jusoCallBack(roadFullAddr){
-	let addressEI =	document.querySelector("#address");
-	addressEI.value = roadFullAddr;
-}
+	function valid(){
+		return false;
+	}
+	
+	function idCheck(){
+		//DB에서 확인해서 정상이면 isChecking = true;
+		$.ajax(function(){
+			
+		});
+	};
+	
+	// 주소검색 팝업open
+	function goPopup(){
+		var pop = window.open("/blog/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+	};
+	
+	// result 값 넣어주기
+	function jusoCallBack(roadFullAddr){
+		let addressEI =	document.querySelector("#address");
+		addressEI.value = roadFullAddr;
+	};
 </script>
 
 </body>
