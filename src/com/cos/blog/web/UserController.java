@@ -2,6 +2,10 @@ package com.cos.blog.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +21,7 @@ import com.cos.blog.util.Script;
 @WebServlet("/user")
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
     public UserController() {
         super();
     }
@@ -75,29 +79,23 @@ public class UserController extends HttpServlet {
 			// ajax에서 넘어온 data와 contentType에 따라 값을 출력하는 방식이다름
 			/*
 				ex 1) data text인경우
-			*/
-			//BufferedReader br = request.getReader();
-			//String username = br.readLine();
-			//System.out.println("username : "+ username );
-			
-			/*
-				ex 2) data key=value인경우
-			    String username = request.getParameter("username");
+				type : GET 인경우
+			  	String username = request.getParameter("username");
 			    System.out.println("username : "+ username );
-			*/
+			*/	
 			
-			/*
-			  ex 2) data jon인경우
-			*/
-			String username = request.getParameter("username");
-			System.out.println("username변경 : "+ username );
-			
+			//type: POST
 			BufferedReader br = request.getReader();
-			String username1 = br.readLine();
-			System.out.println("username : "+ username1 );
-			
-			
-			 
+			String username = br.readLine();
+
+			int result = userService.idDubChk(username);
+			PrintWriter out = response.getWriter();
+			if(result == 1) {
+				out.print("ok");
+			}else {
+				out.print("fail");
+			}
+
 		}
 	}
 	

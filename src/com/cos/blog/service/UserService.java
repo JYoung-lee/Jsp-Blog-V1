@@ -40,8 +40,8 @@ public class UserService {
 	
 	//아이디중복체크
 	public int idDubChk(String username) {
-		
-		return -1;
+		int result = userDao.findByUsername(username);
+		return result;
 	}
 	
 

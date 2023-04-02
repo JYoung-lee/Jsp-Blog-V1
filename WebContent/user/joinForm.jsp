@@ -32,6 +32,9 @@
 	let isChecking = false;
 
 	function valid(){
+		if(isChecking == false){
+			alert("아이디 중복체크를 해주세요.");	
+		}
 		return isChecking;
 	}
 	
@@ -40,13 +43,14 @@
 		
 		//DB에서 확인해서 정상이면 isChecking = true;
 		$.ajax({
-			type:"POST",							// 요청 타입
+			type:"POST",						// 요청 타입
 			url:"/blog/user?cmd=usernameCheck",	// URL
-			data:username,							// 요청 데이터
+			data:username,						// 요청 데이터
 			contentType:"text/plain; charset=utf-8", //MIME 타입
 			dateType:"text"						  //응답받을 데이터 타입을 적으면 자바스크립트 오브젝트로 파싱해줌
 		}).done(function(data){ //컨트롤러 연결이후 return 받는다.
 			if(data === 'ok'){
+				isChecking = false;
 				alert("유저네임이 중복되었습니다.");
 			}else {
 				isChecking = true;
