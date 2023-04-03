@@ -34,8 +34,7 @@ public class UserService {
 	//로그인
 	// SELETE * FROM USER WHERE USERNAME=? AND PASSWORD = ?
 	public User login(LoginReqDto dto) {
-		
-		return null;
+		return userDao.findByUsernameAndPassword(dto);
 	}
 	
 	//아이디중복체크

@@ -11,7 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
 import com.cos.blog.service.UserService;
@@ -41,7 +43,7 @@ public class UserController extends HttpServlet {
 		String cmd = request.getParameter("cmd");
 		UserService userService = new UserService();
 		
-		if(cmd.equals("loginFrom")) {
+		if(cmd.equals("loginForm")) {
 			//아이디 기억
 			response.sendRedirect("user/loginForm.jsp");
 		}else if(cmd.equals("login")) {
@@ -51,7 +53,14 @@ public class UserController extends HttpServlet {
 			LoginReqDto dto = new LoginReqDto();
 			dto.setUsername(username);
 			dto.setPassword(password);
-			userService.login(dto);
+			User userEntity = userService.login(dto);
+			if(userEntity != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("principal", userEntity); //인증주체
+				response.sendRedirect("index.jsp");
+			}else {
+				Script.back(response, "로그인 실패");
+			}
 			
 		}else if(cmd.equals("joinForm")) {
 			response.sendRedirect("user/joinForm.jsp");	
@@ -83,7 +92,6 @@ public class UserController extends HttpServlet {
 			  	String username = request.getParameter("username");
 			    System.out.println("username : "+ username );
 			*/	
-			
 			//type: POST
 			BufferedReader br = request.getReader();
 			String username = br.readLine();
@@ -95,8 +103,11 @@ public class UserController extends HttpServlet {
 			}else {
 				out.print("fail");
 			}
-
+			out.flush();
+		}else if(cmd.equals("logout")) {
+			HttpSession session = request.getSession();
+			session.invalidate();
+			response.sendRedirect("index.jsp");
 		}
 	}
-	
 }

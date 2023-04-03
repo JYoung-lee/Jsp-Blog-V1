@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.user.dto.JoinReqDto;
+import com.cos.blog.domain.user.dto.LoginReqDto;
 
 public class UserDao {
 
@@ -29,17 +30,7 @@ public class UserDao {
 		return -1;
 	}
 	
-	public void update() { //회원수정
-		
-		
-	}
-	
-	public void usernameCheck() {//아이디 중복 체크
-		
-		
-	}
-	
-	public int findByUsername(String username) { // 회원 정보
+	public int findByUsername(String username) { //아이디 중복 체크
 		String sql = "SELECT * FROM USER WHERE USERNAME=?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -61,4 +52,37 @@ public class UserDao {
 		return -1;
 		
 	}
+	
+	public User findByUsernameAndPassword(LoginReqDto dto) {
+		String sql = "SELECT ID, USERNAME, EMAIL, ADDRESS "
+					+"FROM USER "
+					+"WHERE USERNAME = ? AND PASSWORD = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getUsername());
+			pstmt.setString(2, dto.getPassword());
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				User user = User.builder()
+						.id(rs.getInt("id"))
+						.username(rs.getString("username"))
+						.email(rs.getString("email"))
+						.address(rs.getString("address"))
+						.build();
+				return user;
+			}
+		}catch(Exception e) {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+	
+	public void update() { //회원수정
+		
+		
+	}
+	
 }
