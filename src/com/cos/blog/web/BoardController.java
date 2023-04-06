@@ -6,6 +6,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.cos.blog.domain.board.dto.SaveReqDto;
+import com.cos.blog.domain.user.User;
+import com.cos.blog.service.BoardService;
+import com.cos.blog.util.Script;
 
 //http://localhost:8090/blog/board
 @WebServlet("/board")
@@ -25,9 +31,40 @@ public class BoardController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
-
+	
+	
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		String cmd = request.getParameter("cmd");
+		BoardService boardService = new BoardService();
+	
+		HttpSession session = request.getSession();
+		if(cmd.equals("saveForm")) {
+			User principal = (User)session.getAttribute("principal");
+			if(principal != null) {
+				response.sendRedirect("board/saveForm.jsp");
+			}else {
+				response.sendRedirect("user/loginForm.jsp");
+			}
+		}else if(cmd.equals("save")) {
+			int userId = Integer.parseInt(request.getParameter("userId"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			
+			SaveReqDto dto = new SaveReqDto();
+			dto.setTitle(title);
+			dto.setContent(content);
+			dto.setUserId(userId);
+			
+			
+			int result = boardService.boardWirte(dto);
+			if(result == 1) {// 정상
+				response.sendRedirect("index.jsp");
+			}else {// 실패
+				Script.back(response, "글쓰기 실패");
+			}
+			
+		}
+		
 	}
 	
 }
