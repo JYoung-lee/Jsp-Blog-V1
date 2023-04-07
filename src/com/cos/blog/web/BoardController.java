@@ -63,7 +63,7 @@ public class BoardController extends HttpServlet {
 				Script.back(response, "글쓰기 실패");
 			}
 			
-		}else if()
+		}
 		
 	}
 	

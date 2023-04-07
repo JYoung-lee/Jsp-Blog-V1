@@ -29,7 +29,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- .jsp로 들어오는 모든 페이지에 AOP 적용 매핑순서2-->
+	<!-- .jsp로 들어오는 모든 페이지에 적용 매핑순서2-->
 	<filter-mapping>
 		<filter-name>FobidenUrlConfig</filter-name>
 		<url-pattern>*.jsp</url-pattern>
