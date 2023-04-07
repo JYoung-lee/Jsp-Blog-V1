@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,8 +45,8 @@ public class UserController extends HttpServlet {
 		UserService userService = new UserService();
 		
 		if(cmd.equals("loginForm")) {
-			//아이디 기억
-			response.sendRedirect("user/loginForm.jsp");
+			RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
+			dis.forward(request, response); 
 		}else if(cmd.equals("login")) {
 			//서비스 호출
 			String username = request.getParameter("username");
@@ -63,7 +64,8 @@ public class UserController extends HttpServlet {
 			}
 			
 		}else if(cmd.equals("joinForm")) {
-			response.sendRedirect("user/joinForm.jsp");	
+			RequestDispatcher dis = request.getRequestDispatcher("user/joinForm.jsp");
+			dis.forward(request, response); 
 			
 		}else if(cmd.equals("join")) {
 			//서비스 호출
