@@ -14,16 +14,24 @@
 	<div class="progress col-md-12 m-2">
 		<div class="progress-bar" style="width: 70%"></div>
 	</div>
-		<div class="card col-md-12 m-2">
-			<div class="card-body">
-				<h4 class="card-title">제목</h4>
-				<a href="#" class="btn btn-primary">상세보기</a>
-			</div>
-		</div>
+	<!-- JSTL forEach문, EL을 써서 게시글 뿌리기 -->
+	 	<c:forEach var="board" items="${boards}">  
+			<div class="card col-md-12 m-2">
+				<div class="card-body">
+					<h4 class="card-title">${board.title}</h4>
+					<a href="/blog/board?cmd=detail&id=${board.id}" class="btn btn-primary">상세보기</a>
+				</div>
+			</div>	
+		</c:forEach>
 	<br />
+	<h1>${param.cmd}</h1>
+	<h1>${param.page}</h1>
+	<h1></h1>
+	<!--  disabled 클릭x-->
+	<!-- <c:choose> -> when, otherwise 사용해도되고 삼항연산자사용해서 넣어줘도 가능하다. -->
 	<ul class="pagination justify-content-center">
-		<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-		<li class="page-item"><a class="page-link" href="#">Next</a></li>
+		<li class="page-item ${param.page == 0 ? 'disabled' : '' }"><a class="page-link" href="/blog/board?cmd=list&page=${param.page-1}">Previous</a></li>
+		<li class="page-item"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>
 	</ul>
 </div>
 </body>
