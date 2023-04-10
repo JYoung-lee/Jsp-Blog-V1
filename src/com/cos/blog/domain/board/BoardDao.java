@@ -61,4 +61,26 @@ public class BoardDao {
 		return null;
 	}
 	
+	public int getArticleCount() {
+		String sql = "SELECT COUNT(*) FROM BOARD";
+		
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return -1;
+	}
+	
 }

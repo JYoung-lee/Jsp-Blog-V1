@@ -23,6 +23,11 @@ public class BoardService {
 	
 	//게시글 BoardList
 	public List<Board> getBoardList(int page){	
-		return  boardDao.findAll(page);
-	} 
+		return boardDao.findAll(page);
+	}
+	
+	//게시글 전체 Count
+	public int getArticleCount(){	
+		return boardDao.getArticleCount();
+	}
 }

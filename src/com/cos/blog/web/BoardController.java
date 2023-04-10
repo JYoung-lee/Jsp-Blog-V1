@@ -72,22 +72,27 @@ public class BoardController extends HttpServlet {
 		}else if(cmd.equals("list")) {
 			int page = Integer.parseInt(request.getParameter("page"));
 			List<Board> boards = boardService.getBoardList(page);
+			int articleCount = boardService.getArticleCount();
+			int lastPage = (articleCount - 1) / 4;
+			//총 페이징 하는 방법 : 총 데이터 갯수(total) -1 / 보여지는 페이지 글수 ->0부터 시작일경우 2/4 = 0, 3/4 = 0, 4/4 = 1, 9/4 = 2 (0page, 1page, 2page)
+			
+			double currentPosition = (double)page/(lastPage)*100;
+			/*
+				0page / 3page * 100 = 0;
+				1page / 3page * 100 = 33.3
+				2page / 3page * 100 = 66.6
+				3page / 3page * 100 = 100
+			*/
+			
+			request.setAttribute("lastPage", lastPage);
+			request.setAttribute("currentPosition", currentPosition);
 			request.setAttribute("boards", boards);
-			
-			// 풀이 
-			// 계산 (전체 데이터랑 한페이지 갯수 - 총 페이지 나와야되는 계산) 3page 라면 page의 맥스값은 2
-			// page == 2가 되는 순간 isEnd = true
-			// request.setAttribute("isEnd",true); 값을 가져가면된다.
-			
-			//1 2 3..... 총 페이징 하는 방법 : 총 데이터 갯수(total) / 보여주고싶은 갯수 (페이지 글수) = 값 (올림)  
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);
-			
 		}else if(cmd.equals("detail")) {
 			String id = request.getParameter("id");
 			
 			System.out.println(id);
-			System.out.println("여기들어와?");
 			
 		}
 		
