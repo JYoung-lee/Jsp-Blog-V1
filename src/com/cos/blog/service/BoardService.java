@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.BoardDao;
+import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 
 
@@ -29,5 +30,16 @@ public class BoardService {
 	//게시글 전체 Count
 	public int getArticleCount(){	
 		return boardDao.getArticleCount();
+	}
+	
+	public DetailRespDto getDetailArticle(int id){
+		//readcount 업데이트
+		int result = boardDao.readCountUp(id);
+		if(result == 1) {
+			return boardDao.findById(id);
+		}else {
+			return null;
+		}
+		
 	}
 }

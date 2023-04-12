@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cos.blog.config.DB;
+import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 
 public class BoardDao {
@@ -78,6 +79,64 @@ public class BoardDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return -1;
+	}
+	
+	
+	 
+	 
+	 
+	
+	public DetailRespDto findById(int id){
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT B.ID, B.TITLE, B.CONTENT, B.READCOUNT, U.USERNAME ");
+		sb.append("FROM BOARD B INNER JOIN USER U ");
+		sb.append("ON B.USERID = U.ID ");
+		sb.append("WHERE B.ID = ?;");
+		
+		String sql = sb.toString();
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DetailRespDto respDto = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				 respDto = DetailRespDto.builder()
+						.id(rs.getInt("B.ID"))
+						.title(rs.getString("B.TITLE"))
+						.content(rs.getString("B.CONTENT"))
+						.readcount(rs.getInt("B.READCOUNT"))
+						.username(rs.getString("U.USERNAME"))
+						.build();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return respDto;
+	}
+	
+	public int readCountUp(int id) {
+		String sql = "UPDATE BOARD SET READCOUNT = READCOUNT+1 WHERE ID = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally{
 			DB.close(conn, pstmt, rs);
 		}
 		return -1;

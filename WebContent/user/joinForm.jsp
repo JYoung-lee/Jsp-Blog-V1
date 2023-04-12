@@ -62,7 +62,9 @@
 	
 	// 주소검색 팝업open
 	function goPopup(){
-		var pop = window.open("/blog/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+		/* URL .jsp 필터링 함으로써 컨트롤러 탈수있게 변경
+			var pop = window.open("/blog/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); */
+		var pop = window.open("/blog/user?cmd=jusoPopup", "pop","width=570,height=420, scrollbars=yes, resizable=yes");
 	};
 	
 	// result 값 넣어주기
