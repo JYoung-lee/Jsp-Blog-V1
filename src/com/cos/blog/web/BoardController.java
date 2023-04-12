@@ -93,10 +93,14 @@ public class BoardController extends HttpServlet {
 		}else if(cmd.equals("detail")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			DetailRespDto detailArticle = boardService.getDetailArticle(id); //board테이블+user테이블 = 조인된 데이터
+			if(detailArticle == null) {
+				Script.back(response, "상세보기에 실패하였습니다.");
+			}else {
+				request.setAttribute("dto", detailArticle);
+				RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
+				dis.forward(request, response); 
+			}
 			
-			request.setAttribute("dto", detailArticle);
-			RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
-			dis.forward(request, response); 
 		}
 		
 		

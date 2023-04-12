@@ -126,20 +126,18 @@ public class BoardDao {
 		String sql = "UPDATE BOARD SET READCOUNT = READCOUNT+1 WHERE ID = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int result = -1;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return rs.getInt(1);
-			}
+			result = pstmt.executeUpdate();
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally{
-			DB.close(conn, pstmt, rs);
+			DB.close(conn, pstmt);
 		}
-		return -1;
+		return result;
 	}
 	
 }
