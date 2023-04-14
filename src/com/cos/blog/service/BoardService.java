@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.BoardDao;
+import com.cos.blog.domain.board.dto.DeleteReqDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 
@@ -41,5 +42,9 @@ public class BoardService {
 			return null;
 		}
 		
+	}
+	
+	public int deleteById(DeleteReqDto dto) {
+		return boardDao.deleteById(dto); 
 	}
 }

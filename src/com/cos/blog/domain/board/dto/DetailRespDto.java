@@ -20,6 +20,7 @@ public class DetailRespDto {
 	private String content;
 	private int readcount;
 	private String username;
+	private int userid;
 	
 	public String getTitle() {
 		return title.replaceAll("<","&lt;").replaceAll(">", "&gt;");

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cos.blog.config.DB;
+import com.cos.blog.domain.board.dto.DeleteReqDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 
@@ -91,7 +92,7 @@ public class BoardDao {
 	
 	public DetailRespDto findById(int id){
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT B.ID, B.TITLE, B.CONTENT, B.READCOUNT, U.USERNAME ");
+		sb.append("SELECT B.ID, B.TITLE, B.CONTENT, B.READCOUNT, B.USERID, U.USERNAME ");
 		sb.append("FROM BOARD B INNER JOIN USER U ");
 		sb.append("ON B.USERID = U.ID ");
 		sb.append("WHERE B.ID = ?;");
@@ -111,6 +112,7 @@ public class BoardDao {
 						.title(rs.getString("B.TITLE"))
 						.content(rs.getString("B.CONTENT"))
 						.readcount(rs.getInt("B.READCOUNT"))
+						.userid(rs.getInt("B.USERID"))
 						.username(rs.getString("U.USERNAME"))
 						.build();
 			}
@@ -137,6 +139,25 @@ public class BoardDao {
 		}finally{
 			DB.close(conn, pstmt);
 		}
+		return result;
+	}
+	
+	public int deleteById(DeleteReqDto dto) {
+		String sql = "DELETE FROM BOARD WHERE ID = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		int result = -1;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getBoardId());
+			result = pstmt.executeUpdate();
+			
+		}catch(Exception e) { 
+			e.printStackTrace(); 
+		}finally { 
+			DB.close(conn, pstmt); 
+		}
+		
 		return result;
 	}
 	
