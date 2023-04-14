@@ -18,6 +18,7 @@ import com.cos.blog.domain.board.dto.DeleteReqDto;
 import com.cos.blog.domain.board.dto.DeleteRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
+import com.cos.blog.domain.board.dto.UpdateReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
 import com.cos.blog.util.Script;
@@ -131,6 +132,33 @@ public class BoardController extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.print(respData);
 			out.flush();
+		}else if(cmd.equals("updateForm")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			DetailRespDto dto = boardService.getDetailArticle(id);
+			request.setAttribute("dto", dto);
+			
+			RequestDispatcher dis = request.getRequestDispatcher("board/updateForm.jsp");
+			dis.forward(request, response);
+			
+		}else if(cmd.equals("update")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			
+			UpdateReqDto dto = new UpdateReqDto();
+					
+			dto.setTitle(title);
+			dto.setContent(content);
+			dto.setId(id);
+			
+			int result = boardService.updateById(dto);
+			
+			if(result == 1) {
+				response.sendRedirect("/blog/board?cmd=detail&id="+id);
+			}else {
+				Script.back(response, "글 수정에 실패하였습니다.");
+			}
+			
 		}
 		
 		

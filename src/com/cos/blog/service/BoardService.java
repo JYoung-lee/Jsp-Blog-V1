@@ -7,6 +7,7 @@ import com.cos.blog.domain.board.BoardDao;
 import com.cos.blog.domain.board.dto.DeleteReqDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
+import com.cos.blog.domain.board.dto.UpdateReqDto;
 
 
 public class BoardService {
@@ -47,4 +48,9 @@ public class BoardService {
 	public int deleteById(DeleteReqDto dto) {
 		return boardDao.deleteById(dto); 
 	}
+
+	public int updateById(UpdateReqDto dto) {
+		return boardDao.updateById(dto); 
+	}
+	
 }

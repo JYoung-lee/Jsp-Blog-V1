@@ -10,6 +10,7 @@ import com.cos.blog.config.DB;
 import com.cos.blog.domain.board.dto.DeleteReqDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
+import com.cos.blog.domain.board.dto.UpdateReqDto;
 
 public class BoardDao {
 
@@ -160,5 +161,28 @@ public class BoardDao {
 		
 		return result;
 	}
+	
+	public int updateById(UpdateReqDto dto) {
+		String sql = "UPDATE BOARD SET TITLE = ?, CONTENT = ? WHERE ID = ? ";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		int result = -1;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getContent());
+			pstmt.setInt(3, dto.getId());
+			result = pstmt.executeUpdate();
+			
+		}catch(Exception e) { 
+			e.printStackTrace(); 
+		}finally { 
+			DB.close(conn, pstmt); 
+		}
+		
+		return result;
+	}
+	
+	
 	
 }
