@@ -30,9 +30,39 @@
 				<div class="panel panel-info">
 					<div class="panel-heading m-2"><b>Comment</b></div>
 					<div class="panel-body">
-						<textarea id="reply__write__form" class="form-control" placeholder="write a comment.." rows="2"></textarea>
-						<br />
-						<button onclick="#" class="btn btn-primary full-right"> 댓글쓰기 </button>
+							<textarea id="content" id="reply__write__form" class="form-control" placeholder="write a comment.." rows="2"></textarea>
+							<br />
+							<button onclick="replySave(${sessionScope.principal.id}, ${dto.id})" class="btn btn-primary full-right"> 댓글쓰기 </button>
+						<script>
+							function replySave(userId, boardId){
+								console.log("1. "+$('#content').text());
+								console.log("2. "+$('#content').val());
+								
+								let data = {
+									userId: userId, 
+									boardId: boardId,	
+									content: $('#content').text()
+								}
+								
+								
+								
+								/* $.ajax({
+									url: "/blog/reply?cmd=save",
+									type: "post",
+									contentType:
+									data:
+									
+								}).done(function(){
+									
+									
+								});	 */
+							}
+							
+							
+							
+							
+							
+						</script>
 						<div class="clearfix"></div>
 						<hr />
 						<!-- 댓글 리스트 시작 -->
@@ -60,7 +90,7 @@
 <script>
 	function deleteById(boardId){
 		//요청과 응답을 json
-		let data = {
+		var data = {
 			boardId: boardId	
 		}
 		
@@ -71,8 +101,8 @@
 			contentType: "application/json; charset=utf-8",
 			dataTye:"json"
 		}).done(function(result){
-			let result = JSON.parse(result);
-			
+ 			var result = JSON.parse(result); 
+ 			
 			if(result.status == "ok"){
 				location.href="index.jsp";
 			}else {

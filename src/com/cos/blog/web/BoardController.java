@@ -132,6 +132,7 @@ public class BoardController extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.print(respData);
 			out.flush();
+			
 		}else if(cmd.equals("updateForm")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			DetailRespDto dto = boardService.getDetailArticle(id);
