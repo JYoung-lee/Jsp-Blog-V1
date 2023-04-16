@@ -1,5 +1,6 @@
 package com.cos.blog.service;
 
+import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.reply.ReplyDao;
 import com.cos.blog.domain.reply.dto.SavaReqDto;
 
@@ -15,5 +16,8 @@ public class ReplyService {
 	public int saveReply(SavaReqDto dto) {
 		return replyDao.saveReply(dto);	
 	}
-	
+
+	public Reply replyFindById(int id) {
+		return replyDao.replyFindById(id);
+	}
 }

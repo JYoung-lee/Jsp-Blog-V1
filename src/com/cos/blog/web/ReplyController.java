@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.board.dto.CommonRespDto;
+import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.reply.dto.SavaReqDto;
 import com.cos.blog.service.ReplyService;
 import com.cos.blog.util.Script;
@@ -48,15 +49,25 @@ public class ReplyController extends HttpServlet {
 		if(cmd.equals("save")) {
 			BufferedReader br = request.getReader();
 			String reqData = br.readLine();
+			
 			Gson gson = new Gson();
 			SavaReqDto dto = gson.fromJson(reqData, SavaReqDto.class);
-			int result = replyService.saveReply(dto);
-			CommonRespDto<String> commonRespDto = new CommonRespDto<>();
-			commonRespDto.setStatusCode(result);
-			String responData = gson.toJson(commonRespDto);
 			
+			CommonRespDto<Reply> commonRespDto = new CommonRespDto<>();
+			Reply reply = null;
+			int result = replyService.saveReply(dto);
+			if(result != -1) {
+				reply = replyService.replyFindById(result);
+				commonRespDto.setStatusCode(1);
+				commonRespDto.setData(reply);
+			}else {
+				commonRespDto.setStatusCode(-1);
+			}
+			
+			String responData = gson.toJson(commonRespDto);
 			Script.responseData(response, responData);
 		}
 	}
+	
 	
 }

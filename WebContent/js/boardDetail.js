@@ -1,15 +1,3 @@
-function addReply(data){
-		$('#reply__list').prepend(`<li id='reply-${data.boardId}' class='media'>
-								 		<div class='media-body'>
-								 			<strong class='text-primary'>${data.userId}</strong>
-								 			<p>${data.content}</p>	
-								 		</div>	
-								 		<div class='m-2'> <i onclick='deleteReply(${data.boardId})' class='material-icons'> delete</i> </div>
-							 		</li>`);
-		$("#content").val("");
-	
-}
-
 
 function replySave(userId, boardId){
 	let data = {
@@ -27,15 +15,36 @@ function replySave(userId, boardId){
 	}).done(function(result){
 		var result = JSON.parse(result);
 		if(result.statusCode == 1){
-			addReply(data);
-		
+			addReply(result.data);	
 		}else{
-			alert("댓글달기에 실패하였습니다.");										
+			
 		}
+		
 		
 	});							
 }
 
+//댓글 추가
+function addReply(data){
+	$('#reply__list').prepend(`<li id='reply-${data.id}' class='media'>
+							 		<div class='media-body'>
+							 			<strong class='text-primary'>${data.userId}</strong>
+							 			<p>${data.content}</p>	
+							 		</div>	
+							 		<div class='m-2'> <i onclick='deleteReply(${data.id})' class='material-icons'> delete</i> </div>
+						 		</li>`);
+	$("#content").val("");
+
+}
+
+//댓글 삭제 
+function deleteReply(boardData){
+	// 세션의 유저 id와 reply의 userId를 비교하여 삭제
+	alert(boardData);
+	
+}
+
+//게시판 삭제
 function deleteById(boardId){
 	//요청과 응답을 json
 	var data = {
