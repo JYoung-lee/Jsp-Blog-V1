@@ -1,6 +1,10 @@
 package com.cos.blog.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,9 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cos.blog.domain.board.dto.CommonRespDto;
 import com.cos.blog.domain.reply.dto.SavaReqDto;
 import com.cos.blog.service.ReplyService;
 import com.cos.blog.util.Script;
+import com.google.gson.Gson;
 
 //http://localhost:8090/blog/reply
 @WebServlet("/reply")
@@ -40,23 +46,16 @@ public class ReplyController extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		if(cmd.equals("save")) {
-			String content = request.getParameter("content");
-			int userId = Integer.parseInt(request.getParameter("userId"));
-			int boardId = Integer.parseInt(request.getParameter("boardId"));
-			Integer.parseInt(request.getParameter("userId"));
-			SavaReqDto dto = new SavaReqDto();
-			dto.setUserId(userId);
-			dto.setBoardId(boardId);
-			dto.setContent(content);
-			
-			
+			BufferedReader br = request.getReader();
+			String reqData = br.readLine();
+			Gson gson = new Gson();
+			SavaReqDto dto = gson.fromJson(reqData, SavaReqDto.class);
 			int result = replyService.saveReply(dto);
-			if(result == 1) {
-				response.sendRedirect("/blog/board?cmd=detail&boardId="+boardId);
-			}else {
-				Script.back(response, "댓글쓰기 실패!");
-			}		
+			CommonRespDto<String> commonRespDto = new CommonRespDto<>();
+			commonRespDto.setStatusCode(result);
+			String responData = gson.toJson(commonRespDto);
 			
+			Script.responseData(response, responData);
 		}
 	}
 	
