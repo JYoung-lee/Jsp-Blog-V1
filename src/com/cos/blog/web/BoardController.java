@@ -19,8 +19,10 @@ import com.cos.blog.domain.board.dto.DeleteRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
+import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
+import com.cos.blog.service.ReplyService;
 import com.cos.blog.util.Script;
 import com.google.gson.Gson;
 
@@ -47,6 +49,7 @@ public class BoardController extends HttpServlet {
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String cmd = request.getParameter("cmd");
 		BoardService boardService = new BoardService();
+		ReplyService replyService = new ReplyService(); 
 	
 		HttpSession session = request.getSession();
 		if(cmd.equals("saveForm")) {
@@ -99,14 +102,15 @@ public class BoardController extends HttpServlet {
 		}else if(cmd.equals("detail")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			DetailRespDto detailArticle = boardService.getDetailArticle(id); //board테이블+user테이블 = 조인된 데이터
+			List<Reply> replys = replyService.replyListById(id);
 			
 			if(detailArticle == null) {
 				Script.back(response, "상세보기에 실패하였습니다.");
 			}else {
 				request.setAttribute("dto", detailArticle);
+				request.setAttribute("replys", replys);
 				RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
 				dis.forward(request, response);
-				
 				
 			}
 			
@@ -159,6 +163,23 @@ public class BoardController extends HttpServlet {
 			}else {
 				Script.back(response, "글 수정에 실패하였습니다.");
 			}
+			
+		}else if(cmd.equals("search")) {
+			String keyword = request.getParameter("keyword");
+			int page = Integer.parseInt(request.getParameter("page"));
+			
+			List<Board> boards = boardService.findByKeyword(keyword , page);
+			request.setAttribute("boards", boards);
+			
+			int articleCount = boardService.getArticleCount(keyword);
+			int lastPage = (articleCount - 1) / 4;
+			double currentPosition = (double)page/(lastPage)*100;
+			
+			request.setAttribute("lastPage", lastPage);
+			request.setAttribute("currentPosition", currentPosition);
+			request.setAttribute("boards", boards);
+			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
+			dis.forward(request, response);
 			
 		}
 		

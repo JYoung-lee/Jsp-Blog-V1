@@ -27,18 +27,32 @@
 	<!--  disabled 클릭x-->
 <%-- 	<c:choose> -> when, otherwise 사용해도되고 삼항연산자사용해서 넣어줘도 가능하다. --%>
 	<ul class="pagination justify-content-center">
-		<li class="page-item ${param.page == 0 ? 'disabled' : '' }"><a class="page-link" href="/blog/board?cmd=list&page=${param.page-1}">Previous</a></li>
+		
+		
+		<c:choose>
+			<c:when test="${empty param.keyword }">
+				<c:set var="pagePrev" value="/blog/board?cmd=list&page=${param.page-1}"></c:set>
+				<c:set var="pageNext" value="/blog/board?cmd=list&page=${param.page+1}"></c:set>
+			</c:when>
+			<c:otherwise>
+				<c:set var="pagePrev" value="/blog/board?cmd=list&page=${param.page-1}&keyword=${param.keyword}"></c:set>
+				<c:set var="pageNext" value="/blog/board?cmd=list&page=${param.page+1}&keyword=${param.keyword}"></c:set>
+			</c:otherwise>
+		</c:choose>
+		
+		<li class="page-item ${param.page == 0 ? 'disabled' : '' }"><a class="page-link" href="${pagePrev}">Previous</a></li>
 		
 		<c:choose>
 			<c:when test="${lastPage == param.page}">
 				<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
 			</c:when>
 			<c:otherwise>
-				<li class="page-item"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>	
+				<li class="page-item"><a class="page-link" href="${pageNext}">Next</a></li>	
 			</c:otherwise>		
 		</c:choose>
-		
 	</ul>
+	<h2>last : ${lastPage}</h2>
+	<h2>param : ${param.page}</h2>
 </div>
 </body>
 </html>

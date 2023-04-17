@@ -15,7 +15,7 @@ function replySave(userId, boardId){
 	}).done(function(result){
 		var result = JSON.parse(result);
 		if(result.statusCode == 1){
-			addReply(result.data);	
+			addReply(result.data);
 		}else{
 			
 		}
@@ -38,9 +38,21 @@ function addReply(data){
 }
 
 //댓글 삭제 
-function deleteReply(boardData){
+function deleteReply(id){
 	// 세션의 유저 id와 reply의 userId를 비교하여 삭제
-	alert(boardData);
+	$.ajax({
+		type:"post",
+		url:"/blog/reply?cmd=delete&id="+id,
+		dataTye:"json"
+	}).done(function(result){
+		var result = JSON.parse(result);
+		if(result.statusCode == 1){
+			$('#reply-'+id).remove();
+		}else{
+			alert("댓글 삭제 실패");
+		}
+	});
+
 	
 }
 
@@ -59,7 +71,6 @@ function deleteById(boardId){
 		dataTye:"json"
 	}).done(function(result){
 		var result = JSON.parse(result); 
-		
 		if(result.status == "ok"){
 			location.href="index.jsp";
 		}else {

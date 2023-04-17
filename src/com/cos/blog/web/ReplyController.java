@@ -2,11 +2,7 @@ package com.cos.blog.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -66,6 +62,16 @@ public class ReplyController extends HttpServlet {
 			
 			String responData = gson.toJson(commonRespDto);
 			Script.responseData(response, responData);
+		}else if(cmd.equals("delete")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			int result = replyService.deleteById(id);
+			
+			CommonRespDto commonDto = new CommonRespDto();
+			commonDto.setStatusCode(result);
+			
+			Gson gson = new Gson();
+			String jsonData = gson.toJson(commonDto);
+			Script.responseData(response, jsonData);
 		}
 	}
 	

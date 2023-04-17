@@ -4,9 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cos.blog.config.DB;
-import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.reply.dto.SavaReqDto;
 
 public class ReplyDao {
@@ -35,7 +36,7 @@ public class ReplyDao {
 			
 			return result;
 		}catch(Exception e) {
-			
+			e.printStackTrace();
 		}finally {
 			DB.close(conn, pstmt, rs);
 		}
@@ -62,9 +63,8 @@ public class ReplyDao {
 						.boardId(rs.getInt("BOARDID"))
 						.content(rs.getString("CONTENT"))
 						.build();
+				return reply;
 			}
-			
-			return reply;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -73,5 +73,60 @@ public class ReplyDao {
 		
 		return reply;
 	}
+	
+	public List<Reply> findAll(int boardId) {
+		String sql = "SELECT * FROM REPLY WHERE BOARDID=? ORDER BY ID DESC";
+		
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Reply reply = null;
+		List<Reply> replys = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardId);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				reply = Reply.builder()
+						.id(rs.getInt("ID"))
+						.userId(rs.getInt("USERID"))
+						.boardId(rs.getInt("BOARDID"))
+						.content(rs.getString("CONTENT"))
+						.build();
+				replys.add(reply);
+			}
+			
+			return replys;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		
+		return replys;
+	}
+	
+	
+	public int deleteById(int id) {
+		String sql = "DELETE FROM REPLY WHERE ID = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql); 
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		
+		return -1;
+		
+	}
+	
 	
 }

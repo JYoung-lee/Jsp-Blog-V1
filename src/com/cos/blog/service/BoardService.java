@@ -34,6 +34,11 @@ public class BoardService {
 		return boardDao.getArticleCount();
 	}
 	
+	
+	public int getArticleCount(String keyword){	
+		return boardDao.getArticleCount(keyword);
+	}
+	
 	public DetailRespDto getDetailArticle(int id){
 		//readcount 업데이트
 		int result = boardDao.readCountUp(id);
@@ -52,5 +57,12 @@ public class BoardService {
 	public int updateById(UpdateReqDto dto) {
 		return boardDao.updateById(dto); 
 	}
+	
+	
+	public List<Board> findByKeyword(String keyword, int page){
+		return boardDao.findByKeyword(keyword, page);
+	}
+	
+	
 	
 }
